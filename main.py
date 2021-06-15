@@ -10,6 +10,7 @@ from datetime import *
 import re
 from playsound import playsound
 import random
+import uuid
 
 root = Tk()
 root.title("Lotto Verification")  # WINDOW TITLE
@@ -51,6 +52,9 @@ entry3 = Entry(root)
 entry3.config(bg="#212529", fg="#ffbe0b", font="50")
 entry3.place(x=450, y=200)
 
+uuid.uuid4()
+user_id = uuid.uuid4()
+
 
 # DEFINING LOG IN FUNCTION
 def verify():
@@ -60,7 +64,7 @@ def verify():
             entry2.get() + " " + "Email Address:" + " " + entry1.get() + " " + "ID Number:" + " " + entry3.get() + " " + "Logged in "
                                                                                                                          "to play "
                                                                                                                          "Lotto at:"
-            + str(now) +
+            + str(now) + "\n" + "User ID Is: " + str(user_id) +
             "\n")
     w.close()
     try:
@@ -68,7 +72,7 @@ def verify():
         age = str((datetime.today() - id_number.date_of_birth) // timedelta(days=365.25))
         if int(age) >= 18:
             messagebox.showinfo("Success", "Let's Play")
-            playsound("DrumrollSound Effect.mp3")
+            playsound("click.mp3")
             root.destroy()
             import lotto
         else:
@@ -89,10 +93,12 @@ def delete():
     entry1.delete(0, 'end')
     entry2.delete(0, 'end')
     entry3.delete(0, 'end')
+    playsound("ha.mp3")
 
 
 # DEFINING EXIT BUTTON FUNCTION
 def out():
+    playsound("alert.mp3")
     msg = messagebox.askquestion("Gone So Soon ? ", "Are You Sure You Would Like To Exit ?")  # MESSAGE DISPLAYED
     # WHEN CLICKING EXIT BUTTON
     if msg == "yes":  # IF OPTION IS YES THE WINDOW CLOSES, IF NOT WINDOW STAYS OPEN

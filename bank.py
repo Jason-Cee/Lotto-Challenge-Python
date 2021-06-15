@@ -74,14 +74,16 @@ def delete():
     acc_ent.delete(0, 'end')
     accnumb.delete(0, 'end')
     code.delete(0, 'end')
+    playsound("ha.mp3")
 
-
+# STYLING OF CLEAR BUTTON
 clear = Button(root, text=" Clear ", bg="#212529", fg="#f0e68c", font=("Ariel", 15), command=delete)
 clear.place(x=470, y=500)
 
 
 # DEFINING EXIT BUTTON FUNCTION
 def destroy():
+    playsound("alert.mp3")
     msg = messagebox.askquestion("Gone So Soon", "Are You Sure You Would Like To Exit ?")
     if msg == "yes":
         root.destroy()

@@ -1,10 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from playsound import playsound
-from random import *
-from random import randint
-
-# playsound("winner.mp3")
+import random
 
 root = Tk()
 root.title("Lotto Verification")  # WINDOW TITLE
@@ -34,13 +31,46 @@ box6 = Spinbox(frame, from_=1, to=49, width=2, font=("Ariel", 30))
 box6.place(x=820, y=10)
 
 
+# GENERATING RANDOM NUMBERS
 def submit():
-    import random
-    x = random.randint(0, 49)
+    playsound("DrumrollSound Effect.mp3")
+    numbers = list(range(1, 50))
+    random.shuffle(numbers)
+    draw = numbers[:6]
+
+    box7["state"] = "normal"
+    box7.delete(0, END)
+    box7.insert(0, draw[0])
+    box7["state"] = "readonly"
+
+    box8["state"] = "normal"
+    box8.delete(0, END)
+    box8.insert(0, draw[1])
+    box8["state"] = "readonly"
+
+    box9["state"] = "normal"
+    box9.delete(0, END)
+    box9.insert(0, draw[2])
+    box9["state"] = "readonly"
+
+    box10["state"] = "normal"
+    box10.delete(0, END)
+    box10.insert(0, draw[3])
+    box10["state"] = "readonly"
+
+    box11["state"] = "normal"
+    box11.delete(0, END)
+    box11.insert(0, draw[4])
+    box11["state"] = "readonly"
+
+    box12["state"] = "normal"
+    box12.delete(0, END)
+    box12.insert(0, draw[5])
+    box12["state"] = "readonly"
 
 
 # PLAY BUTTON
-play = Button(root, bg="#212529", fg="#f0e68c", font="50", text="PLAY")
+play = Button(root, bg="#212529", fg="#f0e68c", font="50", text="PLAY", command=submit)
 play.place(x=465, y=300)
 
 # LABEL BOX
@@ -48,7 +78,7 @@ frame = LabelFrame(root, width=950, height=100, text="Winning Numbers", bg="#49a
 frame.place(x=25, y=380)
 
 # ENTRIES
-box7 = Entry(frame, width=2, font=("Ariel", 30), state="readonly", )
+box7 = Entry(frame, text="box7", width=2, font=("Ariel", 30), state="readonly")
 box7.place(x=70, y=10)
 box8 = Entry(frame, width=2, font=("Ariel", 30), state="readonly")
 box8.place(x=230, y=10)
@@ -64,22 +94,41 @@ box12.place(x=820, y=10)
 
 # DEFINING CLEAR BUTTON FUNCTION
 def clear():
+    playsound("ha.mp3")
     box.delete(0, 'end')
     box2.delete(0, 'end')
     box3.delete(0, 'end')
     box4.delete(0, 'end')
     box5.delete(0, 'end')
     box6.delete(0, 'end')
-    box7.delete(0, 'end')
-    box8.delete(0, 'end')
-    box9.delete(0, 'end')
-    box10.delete(0, 'end')
-    box11.delete(0, 'end')
-    box12.delete(0, 'end')
+    box7["state"] = "normal"
+    box7.delete(0, END)
+    box7["state"] = "readonly"
+
+    box8["state"] = "normal"
+    box8.delete(0, END)
+    box8["state"] = "readonly"
+
+    box9["state"] = "normal"
+    box9.delete(0, END)
+    box9["state"] = "readonly"
+
+    box10["state"] = "normal"
+    box10.delete(0, END)
+    box10["state"] = "readonly"
+
+    box11["state"] = "normal"
+    box11.delete(0, END)
+    box11["state"] = "readonly"
+
+    box12["state"] = "normal"
+    box12.delete(0, END)
+    box12["state"] = "readonly"
 
 
 # DEFINING EXIT BUTTON FUNCTION
 def destroy():
+    playsound("alert.mp3")
     msg = messagebox.askquestion("Gone So Soon", "Are You Sure You Would Like To Exit ?")
     if msg == "yes":
         root.destroy()
