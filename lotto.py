@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
 from playsound import playsound
+from random import *
+from random import randint
 
 # playsound("winner.mp3")
 
@@ -31,6 +33,12 @@ box5.place(x=670, y=10)
 box6 = Spinbox(frame, from_=1, to=49, width=2, font=("Ariel", 30))
 box6.place(x=820, y=10)
 
+
+def submit():
+    import random
+    x = random.randint(0, 49)
+
+
 # PLAY BUTTON
 play = Button(root, bg="#212529", fg="#f0e68c", font="50", text="PLAY")
 play.place(x=465, y=300)
@@ -40,7 +48,7 @@ frame = LabelFrame(root, width=950, height=100, text="Winning Numbers", bg="#49a
 frame.place(x=25, y=380)
 
 # ENTRIES
-box7 = Entry(frame, width=2, font=("Ariel", 30), state="readonly")
+box7 = Entry(frame, width=2, font=("Ariel", 30), state="readonly", )
 box7.place(x=70, y=10)
 box8 = Entry(frame, width=2, font=("Ariel", 30), state="readonly")
 box8.place(x=230, y=10)
@@ -52,6 +60,7 @@ box11 = Entry(frame, width=2, font=("Ariel", 30), state="readonly")
 box11.place(x=670, y=10)
 box12 = Entry(frame, width=2, font=("Ariel", 30), state="readonly")
 box12.place(x=820, y=10)
+
 
 # DEFINING CLEAR BUTTON FUNCTION
 def clear():
@@ -68,11 +77,13 @@ def clear():
     box11.delete(0, 'end')
     box12.delete(0, 'end')
 
+
 # DEFINING EXIT BUTTON FUNCTION
 def destroy():
     msg = messagebox.askquestion("Gone So Soon", "Are You Sure You Would Like To Exit ?")
     if msg == "yes":
         root.destroy()
+
 
 # DEFINING CLAIM BUTTON FUNCTION
 def claim():
@@ -83,7 +94,7 @@ def claim():
 
 
 # PLAY AGAIN BUTTON
-play_again = Button(root, text="PLAY AGAIN", bg="#212529", fg="#f0e68c", font="50")
+play_again = Button(root, text="PLAY AGAIN", bg="#212529", fg="#f0e68c", font="50", command=submit)
 play_again.place(x=40, y=550)
 # CLAIM BUTTON
 claim = Button(root, text="CLAIM", bg="#212529", fg="#f0e68c", font="50", command=claim)

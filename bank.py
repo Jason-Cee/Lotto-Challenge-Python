@@ -23,7 +23,7 @@ bankdet.place(x=310, y=130)
 # DIFFERENT BANKING OPTIONS
 stock_txt = "Select Bank: "
 stock_var = tkinter.StringVar(value=stock_txt)
-optmenu = OptionMenu(root, stock_var, "Capitec", "Standard Bank", "FNB", "ABSA", "BidVest", "Nedbank")
+optmenu = OptionMenu(root, stock_var, "Capitec", "Standard Bank", "First National Bank", "ABSA", "BidVest", "Nedbank")
 optmenu.config(bg="#212529", fg="#f0e68c", font=("Ariel", 15))
 optmenu.place(x=410, y=200)
 
