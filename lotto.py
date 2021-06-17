@@ -32,7 +32,7 @@ box6.place(x=820, y=10)
 
 
 # GENERATING RANDOM NUMBERS
-def submit():
+def play():
     playsound("DrumrollSound Effect.mp3")
     numbers = list(range(1, 50))
     random.shuffle(numbers)
@@ -68,9 +68,55 @@ def submit():
     box12.insert(0, draw[5])
     box12["state"] = "readonly"
 
+    numbers1 = [int(box.get()), int(box2.get()), int(box3.get()), int(box4.get()), int(box5.get()), int(box6.get())]
+    numbers2 = draw
+    comp = (set(numbers1).intersection(numbers2))
+    results = len(comp)
+    messagebox.showinfo("!!!! WINNINGS !!!!", "You Got " + str(results) + " Winning Ball(s)")
+
+    if results <= 1:
+        playsound("alert.mp3")
+        messagebox.showinfo("Unlucky", "You Have Won R0.00")
+    elif results == 2:
+        playsound("youwin.mp3")
+        messagebox.showinfo("LUCKY", "You Have Won R20.00")
+        messagebox.askquestion("LUCKY", "Would You Like To Claim ?")
+        if "yes":
+            root.destroy()
+        import bank
+    elif results == 3:
+        playsound("youwin.mp3")
+        messagebox.showinfo("LUCKY", "You Have Won R100.50")
+        messagebox.askquestion("LUCKY", "Would You Like To Claim ?")
+        if "yes":
+            root.destroy()
+        import bank
+    elif results == 4:
+        playsound("youwin.mp3")
+        messagebox.showinfo("LUCKY", "You Have Won R2384.00")
+        messagebox.askquestion("LUCKY", "Would You Like To Claim ?")
+        if "yes":
+            root.destroy()
+        import bank
+    elif results == 5:
+        playsound("youwin.mp3")
+        messagebox.showinfo("LUCKY", "You Have Won R8584.00")
+        messagebox.askquestion("LUCKY", "Would You Like To Claim ?")
+        if "yes":
+            root.destroy()
+        import bank
+    else:
+        playsound("slot.mp3")
+        messagebox.showinfo("!!!! JACKPOT !!!!", "YOU HAVE WON THE JACKPOT")
+        messagebox.showinfo("!!!! JACKPOT !!!!", "You Have Won R10 000 000")
+        messagebox.askquestion("LUCKY", "Would You Like To Claim ?")
+        if "yes":
+            root.destroy()
+        import bank
+
 
 # PLAY BUTTON
-play = Button(root, bg="#212529", fg="#f0e68c", font="50", text="PLAY", command=submit)
+play = Button(root, bg="#212529", fg="#f0e68c", font="50", text="PLAY", command=play)
 play.place(x=465, y=300)
 
 # LABEL BOX
@@ -143,7 +189,7 @@ def claim():
 
 
 # PLAY AGAIN BUTTON
-play_again = Button(root, text="PLAY AGAIN", bg="#212529", fg="#f0e68c", font="50", command=submit)
+play_again = Button(root, text="PLAY AGAIN", bg="#212529", fg="#f0e68c", font="50", command=play)
 play_again.place(x=40, y=550)
 # CLAIM BUTTON
 claim = Button(root, text="CLAIM", bg="#212529", fg="#f0e68c", font="50", command=claim)

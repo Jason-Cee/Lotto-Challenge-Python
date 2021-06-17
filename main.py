@@ -22,7 +22,7 @@ root.resizable(False, False)  # NON RESIZEABLE
 now = datetime.now()
 
 # SYMBOLS USED IN EMAIL ADDRESS
-reverify = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
+regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 # LOTTO IMAGE
 img = PhotoImage(file="lotto.png")
 Label(root, image=img).place(x=410, y=20)  # LOTTO IMAGE PLACEMENT
@@ -41,12 +41,12 @@ idnum.place(x=330, y=200)  # ID NUMBER PLACEMENT
 
 # NAME AND SURNAME ENTRY
 entry1 = Entry(root)
-entry1.place(x=750, y=150)
+entry1.place(x=200, y=150)
 entry1.config(bg="#212529", fg="#ffbe0b", font="50")
 # EMAIL ADDRESS ENTRY
 entry2 = Entry(root)
 entry2.config(bg="#212529", fg="#ffbe0b", font="50")
-entry2.place(x=200, y=150)
+entry2.place(x=750, y=150)
 # ID NUMBER ENTRY
 entry3 = Entry(root)
 entry3.config(bg="#212529", fg="#ffbe0b", font="50")
@@ -59,33 +59,53 @@ user_id = uuid.uuid4()
 # DEFINING LOG IN FUNCTION
 def verify():
     # appending text
-    w = open("track.txt", "a+")
-    w.write("Name: " +
-            entry2.get() + " " + "Email Address:" + " " + entry1.get() + " " + "ID Number:" + " " + entry3.get() + " " + "Logged in "
-                                                                                                                         "to play "
-                                                                                                                         "Lotto at:"
-            + str(now) + "\n" + "User ID Is: " + str(user_id) +
-            "\n")
-    w.close()
     try:
-        id_number = rsaidnumber.parse(entry3.get())
-        age = str((datetime.today() - id_number.date_of_birth) // timedelta(days=365.25))
-        if int(age) >= 18:
-            messagebox.showinfo("Success", "Let's Play")
-            playsound("click.mp3")
-            root.destroy()
-            import lotto
-        else:
-            messagebox.showinfo("INVALID", "You Have To Be Over 18 to Play")
-    except ValueError:
-        playsound("alert.mp3")
-        messagebox.showinfo("INVALID", "Please Enter A Valid 13 Digit ID Number")
+        w = open("track.txt", "a+")
+        w.write("Name: " +
+                entry2.get() + " " + "Email Address:" + " " + entry1.get() + " " + "ID Number:" + " " + entry3.get() + " " + "Logged in "
+                                                                                                                             "to play "
+                                                                                                                             "Lotto at:"
+                + str(now) + "\n" + "User ID Is: " + str(user_id) +
+                "\n")
+        w.close()
 
-    mail = entry2.get()
-    if re.search(reverify, mail):
-        messagebox.showinfo("SUCCESS", "Valid Email")
+        id = entry3.get()
+        year = id[:2]
+        if year >= "22":
+            year = "19" + year
+        else:
+            year = "20" + year
+        month = id[2:4]
+        day = id[4:6]
+        dob = year, month, day
+        today = date.today()
+        age = today.year - int(year) - ((today.month, today.day) < (int(month), int(day)))
+        if age >= 18:
+            messagebox.showinfo("SUCCESS", "LET'S PLAY")
+            import lotto
+        elif age < 18:
+            messagebox.showerror("INVALID", "YOU HAVE TO BE 18 OR OLDER TO PLAY")
+    except:
+        messagebox.showerror("Error", "Something went wrong")
+
+
+def success():
+    # SYMBOLS USED IN EMAIL ADDRESS
+    regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+    id = entry3.get()
+    emailaddress = entry2.get()
+
+    if entry1.get() == "":
+        messagebox.showerror("INVALID", "PLEASE ENTER NAME AND SURNAME")
+    elif len(entry3.get()) > 13 or len(entry3.get()) < 13:
+        messagebox.showerror("INVALID", "PLEASE ENTER VALID 13 DIGIT ID NUMBER")
+    # elif not id.isidigit():
+    #     messagebox.showerror("INVALID", "ID NUMBER SHOULD CONTAIN NUMBERS")
+    elif not re.search(regex, emailaddress):
+        messagebox.showerror("INVALID", "PLEASE ENTER VALID EMAIL ADDRESS")
     else:
-        messagebox.showinfo("INVALID", "Invalid Email")
+        root.destroy()
+        import lotto
 
 
 # DEFINING CLEAR BUTTON FUNCTION
@@ -106,7 +126,7 @@ def out():
 
 
 # LOG IN BUTTON
-verify_btn = Button(root, width=10, bg="#212529", fg="#f0e68c", font="50", text="Log In", command=verify)
+verify_btn = Button(root, width=10, bg="#212529", fg="#f0e68c", font="50", text="Log In", command=success)
 verify_btn.place(x=70, y=550)  # LOG IN BUTTON PLACEMENT
 
 # CLEAR BUTTON
