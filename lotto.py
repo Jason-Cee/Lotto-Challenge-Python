@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
 from playsound import playsound
+import datetime
+from datetime import *
 import random
 
 root = Tk()
@@ -8,6 +10,8 @@ root.title("Lotto Verification")  # WINDOW TITLE
 root.geometry("1000x600")  # WINDOW SIZE
 root.config(bg="#ffbe0b")  # WINDOW COLOR
 root.resizable(False, False)  # NON RESIZEABLE
+
+now = datetime.now()
 
 # LOTTO IMAGE
 img = PhotoImage(file="lotto.png")
@@ -20,7 +24,7 @@ frame.place(x=25, y=150)
 box = Spinbox(frame, from_=1, to=49, width=2, font=("Ariel", 30))
 box.place(x=70, y=10)
 box2 = Spinbox(frame, from_=1, to=49, width=2, font=("Ariel", 30))
-box2.place(x=230, y=10)
+box2.place(x=220, y=10)
 box3 = Spinbox(frame, from_=1, to=49, width=2, font=("Ariel", 30))
 box3.place(x=370, y=10)
 box4 = Spinbox(frame, from_=1, to=49, width=2, font=("Ariel", 30))
@@ -30,14 +34,12 @@ box5.place(x=670, y=10)
 box6 = Spinbox(frame, from_=1, to=49, width=2, font=("Ariel", 30))
 box6.place(x=820, y=10)
 
-
 # GENERATING RANDOM NUMBERS
-def play():
+def plays():
     playsound("DrumrollSound Effect.mp3")
     numbers = list(range(1, 50))
     random.shuffle(numbers)
     draw = numbers[:6]
-
     box7["state"] = "normal"
     box7.delete(0, END)
     box7.insert(0, draw[0])
@@ -68,12 +70,14 @@ def play():
     box12.insert(0, draw[5])
     box12["state"] = "readonly"
 
+    play["state"] = "disabled"
+    play_again["state"] = "normal"
+
     numbers1 = [int(box.get()), int(box2.get()), int(box3.get()), int(box4.get()), int(box5.get()), int(box6.get())]
     numbers2 = draw
     comp = (set(numbers1).intersection(numbers2))
     results = len(comp)
     messagebox.showinfo("!!!! WINNINGS !!!!", "You Got " + str(results) + " Winning Ball(s)")
-
     if results <= 1:
         playsound("alert.mp3")
         messagebox.showinfo("Unlucky", "You Have Won R0.00")
@@ -116,7 +120,7 @@ def play():
 
 
 # PLAY BUTTON
-play = Button(root, bg="#212529", fg="#f0e68c", font="50", text="PLAY", command=play)
+play = Button(root, bg="#212529", fg="#f0e68c", font="50", text="PLAY", command=plays)
 play.place(x=465, y=300)
 
 # LABEL BOX
@@ -171,9 +175,12 @@ def clear():
     box12.delete(0, END)
     box12["state"] = "readonly"
 
+    play["state"] = "normal"
+    play_again["state"] = "disabled"
+
 
 # DEFINING EXIT BUTTON FUNCTION
-def destroy():
+def close():
     playsound("alert.mp3")
     msg = messagebox.askquestion("Gone So Soon", "Are You Sure You Would Like To Exit ?")
     if msg == "yes":
@@ -182,14 +189,51 @@ def destroy():
 
 # DEFINING CLAIM BUTTON FUNCTION
 def claim():
-    playsound("winner.mp3")
     messagebox.showinfo("CONGRATULATIONS", "!!!! YOU'RE A WINNER !!!!")
     root.destroy()
     import bank
 
 
+def plays_again():
+    msg = messagebox.askquestion("RETRY", "Do You Want To Clear All Numbers ?")
+    if msg == "yes":
+        box.delete(0, 'end')
+        box2.delete(0, 'end')
+        box3.delete(0, 'end')
+        box4.delete(0, 'end')
+        box5.delete(0, 'end')
+        box6.delete(0, 'end')
+
+        box7["state"] = "normal"
+        box7.delete(0, END)
+        box7["state"] = "readonly"
+
+        box8["state"] = "normal"
+        box8.delete(0, END)
+        box8["state"] = "readonly"
+
+        box9["state"] = "normal"
+        box9.delete(0, END)
+        box9["state"] = "readonly"
+
+        box10["state"] = "normal"
+        box10.delete(0, END)
+        box10["state"] = "readonly"
+
+        box11["state"] = "normal"
+        box11.delete(0, END)
+        box11["state"] = "readonly"
+
+        box12["state"] = "normal"
+        box12.delete(0, END)
+        box12["state"] = "readonly"
+
+    play["state"] = "normal"
+    play_again["state"] = "disabled"
+
+
 # PLAY AGAIN BUTTON
-play_again = Button(root, text="PLAY AGAIN", bg="#212529", fg="#f0e68c", font="50", command=play)
+play_again = Button(root, text="PLAY AGAIN", bg="#212529", fg="#f0e68c", font="50", command=plays_again)
 play_again.place(x=40, y=550)
 # CLAIM BUTTON
 claim = Button(root, text="CLAIM", bg="#212529", fg="#f0e68c", font="50", command=claim)
@@ -198,8 +242,11 @@ claim.place(x=350, y=550)
 clear_btn = Button(root, text="CLEAR", bg="#212529", fg="#f0e68c", font="50", command=clear)
 clear_btn.place(x=650, y=550)
 # EXIT BUTTON
-exit_btn = Button(root, text="EXIT", bg="#212529", fg="#f0e68c", font="50", command=destroy)
+exit_btn = Button(root, text="EXIT", bg="#212529", fg="#f0e68c", font="50", command=close)
 exit_btn.place(x=900, y=550)
+
+play["state"] = "normal"
+play_again["state"] = "disabled"
 
 # RUN CODE
 root.mainloop()

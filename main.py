@@ -4,7 +4,6 @@
 # IMPORTS
 from tkinter import *
 from tkinter import messagebox
-import rsaidnumber
 import datetime
 from datetime import *
 import re
@@ -24,8 +23,8 @@ now = datetime.now()
 # SYMBOLS USED IN EMAIL ADDRESS
 regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 # LOTTO IMAGE
-img = PhotoImage(file="lotto.png")
-Label(root, image=img).place(x=410, y=20)  # LOTTO IMAGE PLACEMENT
+limg = PhotoImage(file="lotto.png")
+Label(root, image=limg).place(x=410, y=20)  # LOTTO IMAGE PLACEMENT
 # NAME AND SURNAME
 name = Label(root, text="Name & Surname: ")
 name.config(bg="#212529", fg="#ffbe0b", font="50")  # NAME AND SURNAME SIZE AND COLOR
@@ -57,55 +56,58 @@ user_id = uuid.uuid4()
 
 
 # DEFINING LOG IN FUNCTION
-def verify():
-    # appending text
-    try:
-        w = open("track.txt", "a+")
-        w.write("Name: " +
-                entry2.get() + " " + "Email Address:" + " " + entry1.get() + " " + "ID Number:" + " " + entry3.get() + " " + "Logged in "
-                                                                                                                             "to play "
-                                                                                                                             "Lotto at:"
-                + str(now) + "\n" + "User ID Is: " + str(user_id) +
-                "\n")
-        w.close()
-
-        id = entry3.get()
-        year = id[:2]
-        if year >= "22":
-            year = "19" + year
-        else:
-            year = "20" + year
-        month = id[2:4]
-        day = id[4:6]
-        dob = year, month, day
-        today = date.today()
-        age = today.year - int(year) - ((today.month, today.day) < (int(month), int(day)))
-        if age >= 18:
-            messagebox.showinfo("SUCCESS", "LET'S PLAY")
-            import lotto
-        elif age < 18:
-            messagebox.showerror("INVALID", "YOU HAVE TO BE 18 OR OLDER TO PLAY")
-    except:
-        messagebox.showerror("Error", "Something went wrong")
 
 
 def success():
     # SYMBOLS USED IN EMAIL ADDRESS
+    global dob
     regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
-    id = entry3.get()
-    emailaddress = entry2.get()
 
     if entry1.get() == "":
         messagebox.showerror("INVALID", "PLEASE ENTER NAME AND SURNAME")
     elif len(entry3.get()) > 13 or len(entry3.get()) < 13:
         messagebox.showerror("INVALID", "PLEASE ENTER VALID 13 DIGIT ID NUMBER")
-    # elif not id.isidigit():
-    #     messagebox.showerror("INVALID", "ID NUMBER SHOULD CONTAIN NUMBERS")
-    elif not re.search(regex, emailaddress):
+    elif not re.search(regex, entry2.get()):
         messagebox.showerror("INVALID", "PLEASE ENTER VALID EMAIL ADDRESS")
     else:
         root.destroy()
         import lotto
+
+        try:
+            id = entry3.get()
+            year = id[:2]
+            if year >= "22":
+                year = "19" + year
+            else:
+                year = "20" + year
+            month = id[2:4]
+            day = id[4:6]
+            dob = year, month, day
+            today = date.today()
+            age = today.year - int(year) - ((today.month, today.day) < (int(month), int(day)))
+            if age >= 18:
+                messagebox.showinfo("SUCCESS", "LET'S PLAY")
+                import lotto
+            elif age < 18:
+                messagebox.showerror("INVALID", "YOU HAVE TO BE 18 OR OLDER TO PLAY")
+        except:
+            messagebox.showerror("Error", "Something went wrong")
+            root.destroy()
+
+    w = open("track.txt", "a+")
+    w.write("Name: " +
+            entry1.get() + " " + "Email Address:" + " " + entry2.get() + " " + "ID Number:" + " " + entry3.get() + " " +
+            "Logged in "
+            "to play "
+            "Lotto at:"
+            + str(now) + "\n" + "User ID Is: " + str(user_id) + " " + dob +
+            "\n")
+    w.close()
+
+
+# LOTTO IMAGE
+img = PhotoImage(file="flag.png")
+Label(root, image=img).place(x=85, y=250)  # LOTTO IMAGE PLACEMENT
 
 
 # DEFINING CLEAR BUTTON FUNCTION
@@ -125,7 +127,7 @@ def out():
         root.destroy()  # CLOSE CURRENT WINDOW
 
 
-# LOG IN BUTTON
+# LOG IN BUTTON'
 verify_btn = Button(root, width=10, bg="#212529", fg="#f0e68c", font="50", text="Log In", command=success)
 verify_btn.place(x=70, y=550)  # LOG IN BUTTON PLACEMENT
 
