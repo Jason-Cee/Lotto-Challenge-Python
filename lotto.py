@@ -40,7 +40,7 @@ box6.place(x=820, y=10)
 
 # GENERATING RANDOM NUMBERS
 def plays():
-    # playsound("DrumrollSound Effect.mp3")
+    playsound("DrumrollSound Effect.mp3")
     numbers = list(range(1, 50))
     random.shuffle(numbers)
     draw = numbers[:6]
