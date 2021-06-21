@@ -56,9 +56,15 @@ user_id = uuid.uuid4()
 
 
 # DEFINING LOG IN FUNCTION
-
-
 def success():
+    with open("track.txt", "a+") as w:
+        w.write("Name: " + entry1.get() + "\n")
+        w.write("Email Address: " + entry2.get() + "\n")
+        w.write("ID Number:" + " " + entry3.get() + "\n")
+        w.write("Logged in to play Lotto at :" + str(now) + "\n")
+        w.write("User ID Is: " + str(user_id) + "\n")
+        w.write("\n")
+        w.close()
     # SYMBOLS USED IN EMAIL ADDRESS
     global dob
     regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
@@ -73,36 +79,22 @@ def success():
         root.destroy()
         import lotto
 
-        try:
-            id = entry3.get()
-            year = id[:2]
-            if year >= "22":
-                year = "19" + year
-            else:
-                year = "20" + year
-            month = id[2:4]
-            day = id[4:6]
-            dob = year, month, day
-            today = date.today()
-            age = today.year - int(year) - ((today.month, today.day) < (int(month), int(day)))
-            if age >= 18:
-                messagebox.showinfo("SUCCESS", "LET'S PLAY")
-                import lotto
-            elif age < 18:
-                messagebox.showerror("INVALID", "YOU HAVE TO BE 18 OR OLDER TO PLAY")
-        except:
-            messagebox.showerror("Error", "Something went wrong")
-            root.destroy()
-
-    w = open("track.txt", "a+")
-    w.write("Name: " +
-            entry1.get() + " " + "Email Address:" + " " + entry2.get() + " " + "ID Number:" + " " + entry3.get() + " " +
-            "Logged in "
-            "to play "
-            "Lotto at:"
-            + str(now) + "\n" + "User ID Is: " + str(user_id) + " " + dob +
-            "\n")
-    w.close()
+    idNUM = entry3.get()
+    year = id[:2]
+    if year >= "22":
+        year = "19" + year
+    else:
+        year = "20" + year
+        month = idNUM[2:4]
+        day = idNUM[4:6]
+        dob = year, month, day
+        today = date.today()
+        age = today.year - int(year) - ((today.month, today.day) < (int(month), int(day)))
+        if age >= 18:
+            messagebox.showinfo("SUCCESS", "LET'S PLAY")
+            import lotto
+        elif age < 18:
+            messagebox.showerror("INVALID", "YOU HAVE TO BE 18 OR OLDER TO PLAY")
 
 
 # LOTTO IMAGE

@@ -1,3 +1,5 @@
+# IMPORTS NEEDED TO RUN MY CODE
+import re
 from tkinter import *
 from tkinter import messagebox
 from playsound import playsound
@@ -11,6 +13,7 @@ root.geometry("1000x600")  # WINDOW SIZE
 root.config(bg="#ffbe0b")  # WINDOW COLOR
 root.resizable(False, False)  # NON RESIZEABLE
 
+# TIME AND DATE
 now = datetime.now()
 
 # LOTTO IMAGE
@@ -34,9 +37,10 @@ box5.place(x=670, y=10)
 box6 = Spinbox(frame, from_=1, to=49, width=2, font=("Ariel", 30))
 box6.place(x=820, y=10)
 
+
 # GENERATING RANDOM NUMBERS
 def plays():
-    playsound("DrumrollSound Effect.mp3")
+    # playsound("DrumrollSound Effect.mp3")
     numbers = list(range(1, 50))
     random.shuffle(numbers)
     draw = numbers[:6]
@@ -73,45 +77,58 @@ def plays():
     play["state"] = "disabled"
     play_again["state"] = "normal"
 
+    # GETTING INPUT LIST AND GENERATED LIST TO COMPARE AND CHECK IF USER WON ANYTHING
     numbers1 = [int(box.get()), int(box2.get()), int(box3.get()), int(box4.get()), int(box5.get()), int(box6.get())]
     numbers2 = draw
     comp = (set(numbers1).intersection(numbers2))
     results = len(comp)
     messagebox.showinfo("!!!! WINNINGS !!!!", "You Got " + str(results) + " Winning Ball(s)")
+    prize = {6: "R10 000  000.00", 5: "R8584.00", 4: "R2384.00", 3: "R100.50", 2: "R20.00", 1: "R00.00", 0: "R00.00"}
+    y = {prize.get(results)}
+
+    # APPENDING TEXT
+    with open("track.txt", "a+") as w:
+        w.write("User Lotto Numbers: " + str(numbers1) + "\n")
+        w.write("Generated Lotto Numbers: " + str(draw) + "\n")
+        w.write("Total Winnings: " + str(y) + "\n")
+        w.write("Played Lotto at: " + str(now) + "\n")
+        w.write("\n")
+        w.close()
+
     if results <= 1:
         playsound("alert.mp3")
         messagebox.showinfo("Unlucky", "You Have Won R0.00")
     elif results == 2:
         playsound("youwin.mp3")
-        messagebox.showinfo("LUCKY", "You Have Won R20.00")
+        messagebox.showinfo("LUCKY", "You Have Won R20.00")  # PRIZE 1
         messagebox.askquestion("LUCKY", "Would You Like To Claim ?")
         if "yes":
             root.destroy()
         import bank
     elif results == 3:
         playsound("youwin.mp3")
-        messagebox.showinfo("LUCKY", "You Have Won R100.50")
+        messagebox.showinfo("LUCKY", "You Have Won R100.50")  # PRIZE 2
         messagebox.askquestion("LUCKY", "Would You Like To Claim ?")
         if "yes":
             root.destroy()
         import bank
     elif results == 4:
         playsound("youwin.mp3")
-        messagebox.showinfo("LUCKY", "You Have Won R2384.00")
+        messagebox.showinfo("LUCKY", "You Have Won R2384.00")  # PRIZE 3
         messagebox.askquestion("LUCKY", "Would You Like To Claim ?")
         if "yes":
             root.destroy()
         import bank
     elif results == 5:
         playsound("youwin.mp3")
-        messagebox.showinfo("LUCKY", "You Have Won R8584.00")
+        messagebox.showinfo("LUCKY", "You Have Won R8584.00")  # PRIZE 4
         messagebox.askquestion("LUCKY", "Would You Like To Claim ?")
         if "yes":
             root.destroy()
         import bank
     else:
         playsound("slot.mp3")
-        messagebox.showinfo("!!!! JACKPOT !!!!", "YOU HAVE WON THE JACKPOT")
+        messagebox.showinfo("!!!! JACKPOT !!!!", "YOU HAVE WON THE JACKPOT")  # PRIZE 5
         messagebox.showinfo("!!!! JACKPOT !!!!", "You Have Won R10 000 000")
         messagebox.askquestion("LUCKY", "Would You Like To Claim ?")
         if "yes":
@@ -187,15 +204,9 @@ def close():
         root.destroy()
 
 
-# DEFINING CLAIM BUTTON FUNCTION
-def claim():
-    messagebox.showinfo("CONGRATULATIONS", "!!!! YOU'RE A WINNER !!!!")
-    root.destroy()
-    import bank
-
-
+# # DEFINING PLAY AGAIN BUTTON
 def plays_again():
-    msg = messagebox.askquestion("RETRY", "Do You Want To Clear All Numbers ?")
+    msg = messagebox.askquestion("RETRY", "Would You Like To Select New Numbers ?")
     if msg == "yes":
         box.delete(0, 'end')
         box2.delete(0, 'end')
@@ -235,9 +246,6 @@ def plays_again():
 # PLAY AGAIN BUTTON
 play_again = Button(root, text="PLAY AGAIN", bg="#212529", fg="#f0e68c", font="50", command=plays_again)
 play_again.place(x=40, y=550)
-# CLAIM BUTTON
-claim = Button(root, text="CLAIM", bg="#212529", fg="#f0e68c", font="50", command=claim)
-claim.place(x=350, y=550)
 # CLEAR BUTTON
 clear_btn = Button(root, text="CLEAR", bg="#212529", fg="#f0e68c", font="50", command=clear)
 clear_btn.place(x=650, y=550)
@@ -245,6 +253,7 @@ clear_btn.place(x=650, y=550)
 exit_btn = Button(root, text="EXIT", bg="#212529", fg="#f0e68c", font="50", command=close)
 exit_btn.place(x=900, y=550)
 
+# IF PLAY BUTTON IS ACTIVATED, PLAY AGAIN BUTTON WILL BE DEACTIVATED
 play["state"] = "normal"
 play_again["state"] = "disabled"
 

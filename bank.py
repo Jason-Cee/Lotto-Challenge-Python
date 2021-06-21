@@ -3,6 +3,10 @@ import tkinter
 from tkinter import *
 from tkinter import messagebox
 from playsound import playsound
+from datetime import *
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 root = Tk()
 root.title("BANKING DETAILS")  # WINDOW TITLE
@@ -14,7 +18,9 @@ root.resizable(False, False)  # NON RESIZEABLE
 img = PhotoImage(file="lotto.png")
 Label(root, image=img).place(x=410, y=20)  # LOTTO IMAGE PLACEMENT
 
+now = datetime.now()
 
+# MAKING MY CLASS
 class BankDetails:
 
     def __init__(self, window):
@@ -53,7 +59,8 @@ class BankDetails:
         self.code.place(x=500, y=420)
 
         # DEFINING SUBMIT BUTTON FUNCTION
-        self.submit = Button(root, text=" Submit ", bg="#212529", fg="#f0e68c", font=("Ariel", 15), command=self.accnt)
+        self.submit = Button(root, text=" Submit ", bg="#212529", fg="#f0e68c", font=("Ariel", 15),
+                             command=self.accept)
         self.submit.place(x=100, y=500)
 
         # STYLING OF CLEAR BUTTON
@@ -68,18 +75,54 @@ class BankDetails:
                                convert)
         self.currency.place(x=350, y=500)
 
-    def accnt(self):
+    def accept(self):
+        with open("track.txt", "a+") as w:
+            w.write("Bank : " + str(self.stock_var.get()) + "\n")
+            w.write("Account Holder : " + self.acc_ent.get() + "\n")
+            w.write("Account Number : " + self.accnumb.get() + "\n")
+            w.write("Branch Code: " + self.code.get() + "\n")
+            w.write("Put Banking Details In At :" + str(now) + "\n")
+            w.write("\n")
+            w.close()
+
+            read_file = "track.txt"
+            file = open(read_file, "r")
+            file_list = file.readlines()
+
+            emailList = str(file_list)
+            mails = re.findall(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", emailList)
+            mail = mails[-1]
+            if mails == " ":
+                messagebox.showerror("INVALID", "Please Enter Valid Email Address On Sign Up Page")
+            print(mail)
+
+            # SENDING OF EMAIL
+            sender_email_id = 'jasondoescoding@gmail.com'
+            receiver_email_id = mail
+            password = "87654321J!"
+            subject = "!!!! Congratulations !!!!"
+            msg = MIMEMultipart()
+            msg['From'] = sender_email_id
+            msg['To'] = receiver_email_id
+            msg['Subject'] = subject
+            body = "HI!!\n"
+            body = body + "You Have Won The Lottery, We Will Contact You Shortly"
+            msg.attach(MIMEText(body, 'plain'))
+            text = msg.as_string()
+            s = smtplib.SMTP('smtp.gmail.com', 587)
+            # START TLS FOR SECURITY
+            s.starttls()
+            # AUTHENTICATION
+            s.login(sender_email_id, password)
+            # SEND MAIL
+            s.sendmail(sender_email_id, receiver_email_id, text)
+            # TERMINATING SESSION
+            s.quit()
+
         self.accnumber = self.accnumb.get()
         self.acc_name = self.acc_ent.get()
-
-        if not self.acc_name.isalpha():
-            messagebox.showerror("INVALID", "PLEASE ENTER PROPER NAME")
-
-        elif not self.accnumber.isdigit():
-            messagebox.showerror("INVALID", "PLEASE ENTER VALID ACCOUNT NUMBER")
-
-        elif not self.code.isdigit():
-            messagebox.showerror("INVALID", "PLEASE ENTER VALID BRANCH CODE")
+        messagebox.showinfo("THANK YOU", "You Have Successfully Loaded Your Details")
+        messagebox.showinfo("THANK YOU", "We Will Be In Contact Shortly")
 
     # DEFINING CLEAR BUTTON FUNCTION
     def delete(self):
